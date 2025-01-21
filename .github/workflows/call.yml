@@ -7,9 +7,9 @@ jobs:
       pr-number: ${{ github.event.pull_request.number }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
-    permissons:
+    permissions:
       contents: read
-      pull_requests: write
+      pull-requests: write
   print:
     needs: [call]
     runs-on: ubuntu-latest
