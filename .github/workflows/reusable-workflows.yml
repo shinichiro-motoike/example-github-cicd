@@ -1,0 +1,35 @@
+name: Reusable Workflows
+on:
+  workflow_call: # Reusable Workflows を起動するイベント
+  inputs: # Reusable Workflows の入力パラメーター定義（平文）
+    pr-number:
+      type: string
+      default: ${{ github.event.pull_request.number }}
+      required: false
+      description: プルリクエスト番号
+  secrets: # Reusable Workflows の入力パラメーター定義（Secrets）
+    token:
+      required: true
+      description: GitHub トークン
+  outputs: # Reusable Workflows の出力値定義
+    message:
+      value: ${{ jobs.comment.outputs.pr-comment }}
+      description: メッセージ
+jobs: # Reusable Workflows のジョブ定義
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - id: pr-comment
+        run: |
+          body="Welcome, ${GITHUB_ACTOR}"
+          gh pr comment "${PR_NUMBER}" --body "${body}"
+          echo "body=${body}" >> "${GITHUB_OUTPUT}"
+        env:
+          PR_NUMBER: ${{ inputs.pr-number }}
+          GITHUB_TOKEN: ${{ secrets.token }}
+        outputs:
+          pr-comment: ${{ steps.pr-comment.output.body }}
