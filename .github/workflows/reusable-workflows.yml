@@ -32,4 +32,4 @@ jobs: # Reusable Workflows のジョブ定義
           PR_NUMBER: ${{ inputs.pr-number }}
           GITHUB_TOKEN: ${{ secrets.token }}
     outputs:
-      pr-comment: ${{ steps.pr-comment.output.body }}
+      pr-comment: ${{ steps.pr-comment.outputs.body }}
